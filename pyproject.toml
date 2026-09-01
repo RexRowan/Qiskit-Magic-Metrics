@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qiskit-magic-metrics"
+version = "0.0.0.dev0"
+description = "Exact, stabilizer-accelerated resource and entanglement metrics for Qiskit, as composable PassManager passes."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.9"
+authors = [
+    { name = "Rex Rowan" },
+]
+keywords = ["qiskit", "quantum computing", "entanglement", "magic", "stabilizer", "nonstabilizerness"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+    "qiskit>=1.2",
+    "numpy",
+]
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov"]
+lint = ["ruff", "black"]
+
+[project.urls]
+Homepage = "https://github.com/RexRowan/qiskit-magic-metrics"
+Issues = "https://github.com/RexRowan/qiskit-magic-metrics/issues"
+
+[tool.setuptools.packages.find]
+include = ["qiskit_magic_metrics*"]
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
