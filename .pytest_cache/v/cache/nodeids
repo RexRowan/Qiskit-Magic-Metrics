@@ -1,0 +1,4 @@
+[
+  "tests/test_scaffold.py::test_base_class_raises_not_implemented",
+  "tests/test_scaffold.py::test_package_imports"
+]
