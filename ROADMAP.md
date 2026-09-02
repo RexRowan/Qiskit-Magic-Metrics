@@ -3,18 +3,23 @@
 Honest status tracker. Nothing below is marked done until it has tests and, where applicable,
 a passing Lean cross-check.
 
-## v0.1 — scaffold (current)
+## v0.1 — core metrics (done)
 
 - [x] Repo structure, packaging, CI skeleton
 - [x] Prior-art writeup (`docs/PRIOR_ART.md`)
-- [ ] `ResourceMetric` base class
-- [ ] `StabilizerRenyiEntropy` — statevector/Pauli-enumeration path (small circuits only)
-- [ ] `StabilizerRenyiEntropy` — Clifford fast path (tableau-based, returns exact 0)
-- [ ] `MeyerWallachMeasure` — statevector path
-- [ ] `MeyerWallachMeasure` — Clifford fast path (tableau-derived purities)
-- [ ] `EntanglementEntropy` — arbitrary bipartition, statevector path
-- [ ] Each metric usable both standalone (`.compute(circuit)`) and as an `AnalysisPass`
-- [ ] Regression tests against known closed-form values (GHZ, W-state, Bell pairs, product states)
+- [x] `ResourceMetric` base class, with Clifford/statevector dispatch (`_dispatch.py`)
+- [x] `StabilizerRenyiEntropy` — statevector/Pauli-enumeration path (small circuits only)
+- [x] `StabilizerRenyiEntropy` — Clifford fast path (returns exact 0.0, O(1))
+- [x] `MeyerWallachMeasure` — statevector path (single-qubit RDM purities)
+- [x] `MeyerWallachMeasure` — Clifford fast path (GF(2) null-space test per qubit)
+- [x] `EntanglementEntropy` — arbitrary bipartition, statevector path
+- [x] `EntanglementEntropy` — Clifford fast path (Fattal et al. GF(2) rank formula)
+- [x] Each metric usable both standalone (`.compute(circuit)`) and as an `AnalysisPass`
+- [x] Regression tests against known closed-form values (GHZ, W-state, Bell pairs, product
+      states) — 20 tests passing, including fast-path-vs-general-path agreement checks
+- [x] Docstring/API review pass before tagging v0.1.0 — Args/Returns/Raises, usage examples,
+      `__repr__`, `py.typed`, `alpha<=0` validation fix
+- [ ] `qiskit-ecosystem` submission checklist review (separate from v0.3, can start early)
 
 ## v0.2 — Lean-verified core
 

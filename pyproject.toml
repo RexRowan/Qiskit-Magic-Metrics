@@ -25,7 +25,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
 ]
 dependencies = [
-    "qiskit>=2.0,<3",
+    "qiskit>=2,<3",
     "numpy",
 ]
 
@@ -39,6 +39,9 @@ Issues = "https://github.com/RexRowan/qiskit-magic-metrics/issues"
 
 [tool.setuptools.packages.find]
 include = ["qiskit_magic_metrics*"]
+
+[tool.setuptools.package-data]
+qiskit_magic_metrics = ["py.typed"]
 
 [tool.black]
 line-length = 100

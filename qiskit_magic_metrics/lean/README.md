@@ -5,23 +5,24 @@
 
 ## Target identity
 
-Default plan: formally verify that the Meyer-Wallach measure's closed form,
+Now that v0.1 is implemented, the concrete candidate is the correctness of the GF(2)
+null-space/rank shortcuts actually in use, rather than the more abstract purity-reduction
+formula originally sketched here:
 
-```
-Q(ψ) = 2 (1 - (1/n) Σ_k tr(ρ_k²))
-```
+- `MeyerWallachMeasure._compute_stabilizer` claims: qubit k's reduced state is pure (tr(rho_k^2)
+  = 1) iff the stabilizer generator matrix, restricted to columns for every qubit except k, has
+  a nonzero GF(2) null space; otherwise tr(rho_k^2) = 1/2. This is the identity worth verifying
+  first, since the whole fast path's correctness rests on it.
+- `EntanglementEntropy._compute_stabilizer` claims the Fattal et al. rank formula
+  `S(A) = rank_GF2(M_B) - |B|`. This is already a published, cited result (arXiv:quant-ph/0406168)
+  rather than something derived here, so verifying it in Lean is lower priority than the
+  Meyer-Wallach claim above, which is this package's own derivation from that same family of
+  results and hasn't been independently checked anywhere else.
 
-agrees with the stabilizer-tableau-derived shortcut (single-qubit purities read directly off the
-tableau rather than computed via full reduced-density-matrix construction) for the finite case
-family: Bell pairs, GHZ states, and small graph states. This mirrors the scope and structure of
-the spider-fusion proof in `qiskit-zx-verified` — a small, enumerable case space, checked with
-`#eval`, no dependency on Mathlib beyond `propext` if that constraint turns out to be achievable
-here too (not guaranteed; revisit once the proof is drafted).
-
-This target may change once the implementation work in `passes/` surfaces a more natural or more
-valuable identity to verify — e.g., the stabilizer Rényi entropy's exact-zero property for
-stabilizer states might be the more interesting claim, since it's the thing the fast path
-actually depends on for correctness. Decide after v0.1 lands, not before.
+Plan: formalize the Meyer-Wallach null-space claim for the finite case family (Bell pairs, GHZ
+states, small graph states), `#eval`-checked against the Python implementation, following the
+spider-fusion proof structure in `qiskit-zx-verified` (small enumerable case space, no Mathlib
+dependency beyond `propext` if achievable).
 
 ## Cross-check bridge (planned)
 
