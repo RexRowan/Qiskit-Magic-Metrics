@@ -9,8 +9,10 @@ contains — directly from a `QuantumCircuit`, `Statevector`, or `Clifford`/stab
 targets algorithm designers and researchers characterizing ansätze, error-correcting code states,
 and NISQ circuit outputs.
 
-**Status: early scaffold.** Interfaces below are the design target; see [ROADMAP.md](ROADMAP.md)
-for what's implemented today.
+**Status: v0.1 — core metrics implemented.** All three metrics below are implemented and
+tested (23 passing tests), each with both a general (statevector) path and a stabilizer fast
+path. See [ROADMAP.md](ROADMAP.md) for what's next (Lean-verified core, docs site, Ecosystem
+submission) and [CHANGELOG.md](CHANGELOG.md) for what shipped in this pass.
 
 ## Why this exists
 
@@ -46,13 +48,13 @@ Explicitly **out of scope**: expressibility/loss-landscape/training-trajectory t
 territory) and randomized-measurement hardware execution (Qurrium's territory). If those get
 built, they belong in a separate package or as contributions upstream, not bolted on here.
 
-## Planned metrics
+## Metrics
 
 | Metric | Class | Exact method | Stabilizer fast path |
 |---|---|---|---|
-| Stabilizer Rényi entropy (magic) | `StabilizerRenyiEntropy` | Pauli-expectation sampling, `P_2α(ψ) = (1/d) Σ_P ⟨ψ|P|ψ⟩^{2α}` | Zero by construction for stabilizer states; tableau-derived, no enumeration |
-| Meyer-Wallach measure | `MeyerWallachMeasure` | `Q(ψ) = 2(1 - (1/n) Σ tr(ρ_k²))` from single-qubit RDMs | Purities read directly from the stabilizer tableau |
-| Multipartite entanglement entropy | `EntanglementEntropy` | Von Neumann entropy across a user-specified bipartition | Rank/purity shortcuts for stabilizer states |
+| Stabilizer Rényi entropy (magic) | `StabilizerRenyiEntropy` | Pauli-expectation sampling, `P_2α(ψ) = (1/d) Σ_P ⟨ψ|P|ψ⟩^{2α}` | Zero by construction for stabilizer states; O(1), no enumeration |
+| Meyer-Wallach measure | `MeyerWallachMeasure` | `Q(ψ) = 2(1 - (1/n) Σ tr(ρ_k²))` from single-qubit RDMs | GF(2) null-space test on the stabilizer tableau, per qubit |
+| Multipartite entanglement entropy | `EntanglementEntropy` | Von Neumann entropy across a user-specified bipartition | Fattal et al. GF(2) rank formula |
 
 ## Installation
 
@@ -60,9 +62,10 @@ built, they belong in a separate package or as contributions upstream, not bolte
 pip install qiskit-magic-metrics
 ```
 
-(Not yet published — this is a local scaffold. See [CONTRIBUTING.md](CONTRIBUTING.md).)
+(Not yet published to PyPI — clone and `pip install -e .` for now. See
+[CONTRIBUTING.md](CONTRIBUTING.md).)
 
-## Quick start (target API)
+## Quick start
 
 ```python
 from qiskit import QuantumCircuit
@@ -94,11 +97,12 @@ print(pm.property_set["meyer_wallach_measure"])
 
 ## The Lean-verified core
 
-`lean/` contains a Lean 4 formalization of one closed-form identity underlying these metrics
-(target: the reduction of the Meyer-Wallach measure to average single-qubit purity, checked
-against the stabilizer-tableau shortcut for the Bell/GHZ/graph-state family). See
-[lean/README.md](qiskit_magic_metrics/lean/README.md) for status and how the cross-check bridge
-works.
+**Not started** (v0.2, see [ROADMAP.md](ROADMAP.md)). `lean/` will contain a Lean 4
+formalization of the GF(2) null-space claim underlying `MeyerWallachMeasure`'s stabilizer fast
+path — this package's own derivation, not a result copied from elsewhere, so it's the one worth
+independently verifying first. See
+[lean/README.md](qiskit_magic_metrics/lean/README.md) for the current target and how the
+cross-check bridge will work.
 
 ## Documentation
 
